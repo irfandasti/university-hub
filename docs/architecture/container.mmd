@@ -1,0 +1,9 @@
+flowchart TB
+  U([Student, Teacher, Admin]) -->|uses| W["Web app: React in browser"]
+  W -->|"HTTPS, JSON"| API
+  subgraph SERVER["Application server: Node.js"]
+    API["API layer: Express routes, controllers, auth and role checks"] --> SV["Service layer: accounts, announcements, assignments, events, notifications, admin"]
+    J["Reminder scheduler: node-cron"] --> SV
+    SV --> R["Data access: repositories"]
+  end
+  R -->|SQL| DB[("MySQL database")]

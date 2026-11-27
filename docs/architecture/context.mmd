@@ -1,0 +1,5 @@
+flowchart LR
+  S([Student]) -->|views content, gets reminders| H[University Hub]
+  T([Teacher]) -->|posts assignments and class notices| H
+  A([Admin]) -->|manages users, notices, events| H
+  H -.->|optional, future| E[External email service]

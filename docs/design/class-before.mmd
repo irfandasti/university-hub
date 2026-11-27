@@ -1,0 +1,75 @@
+classDiagram
+  direction LR
+  class User {
+    -userId : int
+    -fullName : String
+    -email : String
+    -passwordHash : String
+    -role : String
+    -status : String
+    +register()
+    +login()
+    +editProfile()
+    +postAnnouncement()
+    +addAssignment()
+    +manageUsers()
+    +changeRole()
+  }
+  class SchoolClass {
+    -classId : int
+    -name : String
+    -subject : String
+    -department : String
+  }
+  class Assignment {
+    -assignmentId : int
+    -title : String
+    -description : String
+    -instructions : String
+    -createdAt : DateTime
+    -deadline : DateTime
+  }
+  class AssignmentService {
+    -db : MySQLConnection
+    +create(data)
+    +validate(data)
+    +runSql(query)
+    +createNotifications(a)
+    +sendReminders()
+  }
+  class Announcement {
+    -announcementId : int
+    -title : String
+    -message : String
+    -audience : String
+    -createdAt : DateTime
+    -expiresAt : DateTime
+  }
+  class Event {
+    -eventId : int
+    -name : String
+    -description : String
+    -startsAt : DateTime
+    -place : String
+    -status : String
+  }
+  class Society {
+    -societyId : int
+    -name : String
+    -activities : String
+    -contact : String
+  }
+  class Notification {
+    -notificationId : int
+    -message : String
+    -createdAt : DateTime
+    -isRead : boolean
+  }
+  User "0..*" -- "0..*" SchoolClass : linked to
+  SchoolClass "1" -- "0..*" Assignment : has
+  User "1" -- "0..*" Assignment : teacher posts
+  User "1" -- "0..*" Announcement : creates
+  User "1" -- "0..*" Event : creates
+  Society "0..1" -- "0..*" Event : organizes
+  User "1" *-- "0..*" Notification : receives
+  AssignmentService ..> Assignment

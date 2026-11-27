@@ -1,0 +1,14 @@
+flowchart TB
+  subgraph DEV["User device: computer or phone"]
+    B["Web browser running the React app"]
+  end
+  subgraph HOST["Hosted server (provider not chosen)"]
+    WEB["Web server: React build files, HTTPS entry"]
+    APP["Node.js: Express API and scheduler"]
+    DB[("MySQL")]
+    WEB -->|forwards API requests| APP
+    APP -->|SQL| DB
+  end
+  BK[("Backup storage, separate from the server")]
+  B -->|HTTPS| WEB
+  DB -.->|scheduled backup| BK

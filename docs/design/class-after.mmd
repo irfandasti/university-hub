@@ -1,0 +1,98 @@
+classDiagram
+  direction LR
+  class User {
+    -userId : int
+    -fullName : String
+    -email : String
+    -passwordHash : String
+    -role : String
+    -status : String
+  }
+  class SchoolClass {
+    -classId : int
+    -name : String
+    -subject : String
+    -department : String
+  }
+  class Assignment {
+    -assignmentId : int
+    -title : String
+    -description : String
+    -instructions : String
+    -createdAt : DateTime
+    -deadline : DateTime
+  }
+  class Announcement {
+    -announcementId : int
+    -title : String
+    -message : String
+    -audience : String
+    -createdAt : DateTime
+    -expiresAt : DateTime
+  }
+  class Event {
+    -eventId : int
+    -name : String
+    -description : String
+    -startsAt : DateTime
+    -place : String
+    -status : String
+  }
+  class Society {
+    -societyId : int
+    -name : String
+    -activities : String
+    -contact : String
+  }
+  class Notification {
+    -notificationId : int
+    -message : String
+    -createdAt : DateTime
+    -isRead : boolean
+  }
+  User "0..*" -- "0..*" SchoolClass : linked to
+  SchoolClass "1" -- "0..*" Assignment : has
+  User "1" -- "0..*" Assignment : teacher posts
+  User "1" -- "0..*" Announcement : creates
+  User "1" -- "0..*" Event : creates
+  Society "0..1" -- "0..*" Event : organizes
+  User "1" *-- "0..*" Notification : receives
+  class AuthService {
+    +register(data)
+    +login(email, password)
+  }
+  class UserAdminService {
+    +setRole(userId, role)
+    +setStatus(userId, status)
+  }
+  class AssignmentService {
+    +create(teacher, data)
+    +subscribe(observer)
+    -notifyObservers(a)
+  }
+  class AssignmentValidator {
+    +validate(data)
+  }
+  class AssignmentRepository {
+    <<interface>>
+    +create(data)
+  }
+  class MySqlAssignmentRepository {
+    +create(data)
+  }
+  class AssignmentObserver {
+    <<interface>>
+    +onAssignmentCreated(a)
+  }
+  class NotificationObserver {
+    +onAssignmentCreated(a)
+  }
+  AuthService ..> User
+  UserAdminService ..> User
+  AssignmentService ..> Assignment
+  AssignmentService --> AssignmentValidator
+  AssignmentService --> AssignmentRepository
+  AssignmentRepository <|.. MySqlAssignmentRepository
+  AssignmentService "1" o-- "0..*" AssignmentObserver
+  AssignmentObserver <|.. NotificationObserver
+  NotificationObserver ..> Notification
